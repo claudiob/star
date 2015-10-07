@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'star/remote_file'
 require 'open-uri'
 
 describe Star::RemoteFile do

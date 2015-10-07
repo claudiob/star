@@ -3,11 +3,9 @@ require 'net/http'
 require 'openssl'
 require 'base64'
 require 'uri'
-require 'star/config'
 
 module Star
   class RemoteFile
-
     def open
       Tempfile.open 'tmp_file' do |tmp_file|
         yield tmp_file

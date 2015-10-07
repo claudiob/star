@@ -14,11 +14,14 @@ RSpec.configure do |config|
   config.run_all_when_everything_filtered = false
 end
 
-require 'star/config'
+###
+
+require 'star'
+
 Star.configure do |config|
-  config.access_key_id = ENV['STAR_TEST_AWS_ACCESS_KEY_ID']
-  config.secret_access_key = ENV['STAR_TEST_SECRET_ACCESS_KEY']
-  config.bucket = ENV['STAR_TEST_BUCKET']
-  config.duration = 5
-  config.location = ENV['STAR_TEST_LOCATION']
+  config.access_key_id      = ENV['STAR_TEST_AWS_ACCESS_KEY_ID']
+  config.secret_access_key  = ENV['STAR_TEST_SECRET_ACCESS_KEY']
+  config.bucket             = ENV['STAR_TEST_BUCKET']
+  config.location           = ENV['STAR_TEST_LOCATION']
+  config.duration           = 5
 end

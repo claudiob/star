@@ -1,4 +1,5 @@
-require "star/remote_file"
+require 'star/config'
+require 'star/remote_file'
 
 module Star
 end

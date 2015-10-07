@@ -1,47 +1,163 @@
-# What is Star?
+Star - a Ruby library to store archives privately on S3
+=======================================================
 
-Use Star if your ruby application needs to write files to S3 and retrieve them with URLs that expire so users cannot share them.
+Star helps you write apps that need to store files on S3 and retrieve them with expiring URLs.
 
-# Why use Star and not gems like...
-
-Other gems like aws-sdk and fog do this but they are large and have lots of dependencies.
-Star has no dependencies.
-
-# How to install
-
-Add this line to your application's Gemfile:
+After [configuring your app](#how-to-configure), you can write a file to S3 by running:
 
 ```ruby
-gem 'star'
+  remote_file = Star::Remote.new
+  remote_file.open{|f| f << "some text to store in a remote file"}
 ```
 
-And then execute:
+You can successively retrieve the same file from S3 by calling:
 
-    $ bundle
+```ruby
+  url = remote_file.url
+```
 
-Or install it yourself as:
+This will provide a URL that everyone can access *for the next 30 seconds*.
+After 30 seconds, [access will be denied](http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-signed-urls.html#private-content-overview-choosing-duration) to the file using that URL.
 
-    $ gem install star
+Why use Star
+============
 
-## Usage
+Star is not the only Ruby library to help Ruby developers store archives on S3.
+However, most other libraries are [huge](https://rubygems.org/gems/aws-sdk-core) and [heavy on dependencies](https://github.com/fog/fog/blob/master/fog.gemspec#L50-L100).
 
-blah
+Star does one thing, and does it well.
+The codebase is small and there are no runtime dependencies.
+This means less footprint on your app, and code that is easier to read, maintain and upgrade.
 
-## Development
+How to install
+==============
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+To install on your system, run
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+    gem install star
 
-## Contributing
+To use inside a bundled Ruby project, add this line to the Gemfile:
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/star.
+    gem 'star', '~> 0.1.0'
 
 
-## License
+How to use
+==========
 
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+To write a file to S3, [configure your app](#how-to-configure), then create a new remote file
+instance:
 
-## How to test
+```ruby
+remote_file = Star::Remote.new
+```
 
-Set your environment variables in spec_helper
+You can now call any method you would normally use to add content to a Ruby
+`File`, for instance:
+
+```ruby
+remote_file.open do |f|
+  f << "append some text"
+  f.write "write some other text"
+  f.writeln "write a line of text"
+end
+```
+
+Once the file is closed, Star will automatically upload it to S3.
+
+To read the same file from S3, get its URL by calling
+
+```ruby
+remote_file.url
+```
+
+By default, this URL will only be publicly available for 30 seconds.
+This is useful to let your users download the file, while preventing them
+from sharing the URL and having other (unauthenticated) users download it.
+
+How to configure
+================
+
+In order to use Star you must have an [S3 account](https://aws.amazon.com/s3).
+
+Log into your account to retrieve your access key ID, secret access key and
+bucket name, then add the following code to your app:
+
+```ruby
+Star.configure do |config|
+  config.access_key_id = '<YOUR S3 ACCESS KEY ID>'
+  config.secret_access_key = '<YOUR S3 SECRET ACCESS KEY>'
+  config.bucket = '<YOUR S3 BUCKET NAME>'
+end
+```
+
+Make sure that this code is run *before* you use Star.
+For instance, in a Rails app, you can store this code in `config/initializers/star.rb`.
+
+Star also provide two options that you can set in your configuration:
+
+* set `duration` to specify how many seconds the expiring URLs should be valid for (default: 30)
+* set `location` to specify the subfolder of your bucket where files should be stored (default: '/')
+
+For instance, your configuration could look like this:
+
+```ruby
+Star.configure do |config|
+  config.access_key_id = '<YOUR S3 ACCESS KEY ID>'
+  config.secret_access_key = '<YOUR S3 SECRET ACCESS KEY>'
+  config.bucket = '<YOUR S3 BUCKET NAME>'
+  config.duration = 60
+  config.location = 'production/uploads'
+end
+```
+
+Configuring with environment variables
+--------------------------------------
+
+As an alternative to the approach above, you can configure your app with
+variables. Setting the following environment variables:
+
+```bash
+export AWS_ACCESS_KEY_ID="<YOUR S3 ACCESS KEY ID>"
+export AWS_SECRET_ACCESS_KEY="<YOUR S3 SECRET ACCESS KEY>"
+export AWS_BUCKET="<YOUR S3 BUCKET NAME>"
+export STAR_DURATION="60"
+export STAR_LOCATION="production/uploads"
+```
+
+is equivalent to configuring your app with the initializer above.
+
+
+How to contribute
+=================
+
+If you find that a method is missing, fork the project, add the missing code,
+write the appropriate tests, then submit a pull request, and it will gladly
+be merged!
+
+In order to test, you need to have access to a S3 account that will be used
+to upload and download test files.
+
+Set the following environment variables to match your S3 account, then run 
+`rspec` to run the tests:
+
+```bash
+export STAR_TEST_AWS_ACCESS_KEY_ID="<YOUR TEST S3 ACCESS KEY ID>"
+export STAR_TEST_SECRET_ACCESS_KEY="<YOUR TEST S3 SECRET ACCESS KEY>"
+export STAR_TEST_BUCKET="<YOUR TEST S3 BUCKET NAME>"
+export STAR_TEST_LOCATION="<YOUR TEST S3 FOLDER>"
+```
+
+How to release new versions
+===========================
+
+If you are a manager of this project, remember to upgrade the [Star gem](http://rubygems.org/gems/star)
+whenever a new feature is added or a bug gets fixed.
+
+Make sure all the tests are passing on [Travis CI](https://travis-ci.org/Fullscreen/star),
+document the changes in CHANGELOG.md and README.md, bump the version, then run
+
+    rake release
+
+Remember that the star gem follows [Semantic Versioning](http://semver.org).
+Any new release that is fully backward-compatible should bump the *patch* version (0.0.x).
+Any new version that breaks compatibility should bump the *minor* version (0.x.0)
