@@ -1,5 +1,4 @@
-require "star/version"
+require "star/remote_file"
 
 module Star
-  # Your code goes here...
 end
