@@ -1,7 +1,7 @@
-Star - a Ruby library to store archives privately on S3
-=======================================================
+:star2: :star2: Store archives privately on S3 :star2: :star2:
+==============================================================
 
-Star helps you write apps that need to store files on S3 and retrieve them with expiring URLs.
+Star helps you write Ruby apps that need to store files on S3 and retrieve them with expiring URLs.
 
 After [configuring your app](#how-to-configure), you can write a file to S3 by running:
 
@@ -17,7 +17,8 @@ You can successively retrieve the same file from S3 by calling:
 ```
 
 This will provide a URL that everyone can access *for the next 30 seconds*.
-After 30 seconds, [access will be denied](http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-signed-urls.html#private-content-overview-choosing-duration) to the file using that URL.
+
+After 30 seconds, access to the file using that URL [will be denied](http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-signed-urls.html#private-content-overview-choosing-duration).
 
 Why use Star
 ============
@@ -51,7 +52,7 @@ instance:
 remote_file = Star::Remote.new
 ```
 
-You can now call any method you would normally use to add content to a Ruby
+You can now call any method you would normally use to add content to a
 `File`, for instance:
 
 ```ruby
@@ -95,8 +96,8 @@ For instance, in a Rails app, you can store this code in `config/initializers/st
 
 Star also provide two options that you can set in your configuration:
 
-* set `duration` to specify how many seconds the expiring URLs should be valid for (default: 30)
-* set `location` to specify the subfolder of your bucket where files should be stored (default: '/')
+* `duration` specifies how many seconds the expiring URLs should be valid for (default: `30`)
+* `location` specifies the subfolder of your bucket where files should be stored (default: `'/'`)
 
 For instance, your configuration could look like this:
 
@@ -114,7 +115,7 @@ Configuring with environment variables
 --------------------------------------
 
 As an alternative to the approach above, you can configure your app with
-variables. Setting the following environment variables:
+environment variables. For instance, setting the following variables:
 
 ```bash
 export AWS_ACCESS_KEY_ID="<YOUR S3 ACCESS KEY ID>"
@@ -137,7 +138,7 @@ be merged!
 In order to test, you need to have access to a S3 account that will be used
 to upload and download test files.
 
-Set the following environment variables to match your S3 account, then run 
+Set the following environment variables to match your S3 account, then run
 `rspec` to run the tests:
 
 ```bash
