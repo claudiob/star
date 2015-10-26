@@ -3,6 +3,16 @@
 
 Star helps you write Ruby apps that need to store files on S3 and retrieve them with expiring URLs.
 
+The **source code** is available on [GitHub](https://github.com/Fullscreen/star) and the **documentation** on [RubyDoc](http://www.rubydoc.info/github/Fullscreen/star/master/Star/Interface).
+
+[![Build Status](http://img.shields.io/travis/Fullscreen/star/master.svg)](https://travis-ci.org/Fullscreen/star)
+[![Coverage Status](http://img.shields.io/coveralls/Fullscreen/star/master.svg)](https://coveralls.io/r/Fullscreen/star)
+[![Dependency Status](http://img.shields.io/gemnasium/Fullscreen/star.svg)](https://gemnasium.com/Fullscreen/star)
+[![Code Climate](http://img.shields.io/codeclimate/github/Fullscreen/star.svg)](https://codeclimate.com/github/Fullscreen/star)
+[![Online docs](http://img.shields.io/badge/docs-✓-green.svg)](http://www.rubydoc.info/github/Fullscreen/star/master/Star/File)
+[![Gem Version](http://img.shields.io/gem/v/star.svg)](http://rubygems.org/gems/star)
+
+
 After [configuring your app](#how-to-configure), you can write a file to S3 by running:
 
 ```ruby
