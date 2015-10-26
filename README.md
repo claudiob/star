@@ -49,7 +49,7 @@ To install on your system, run
 
 To use inside a bundled Ruby project, add this line to the Gemfile:
 
-    gem 'star', '~> 0.1.0'
+    gem 'star', '~> 1.0'
 
 
 How to use
@@ -215,5 +215,7 @@ document the changes in CHANGELOG.md and README.md, bump the version, then run
     rake release
 
 Remember that the star gem follows [Semantic Versioning](http://semver.org).
-Any new release that is fully backward-compatible should bump the *patch* version (0.0.x).
-Any new version that breaks compatibility should bump the *minor* version (0.x.0)
+Any new release that fixes bugs and does not add features should bump the *patch* version (1.0.x).
+Any new release that is fully backward-compatible should bump the *minor* version (1.x.0).
+Any new version that breaks compatibility should bump the *major* version (2.0.0).
+
