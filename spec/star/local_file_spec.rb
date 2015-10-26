@@ -24,4 +24,3 @@ describe Star::File do
     end
   end
 end
-
