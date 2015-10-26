@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['claudiob', 'Jeremy Cohen Hoffing']
   spec.email         = ['claudiob@gmail.com', 'jcohenhoffing@gmail.com']
   spec.summary       = %q{Write files to S3, read them with expiring URLs}
-  spec.description   = %q{Star provides a RemoteFile class to write files to S3
+  spec.description   = %q{Star provides a File class to write files to S3
     as though they were local files, and to retrieve them from S3 with a URL
     that expires after 30 seconds, so it cannot be shared publicly.}
   spec.homepage      = 'https://github.com/fullscreen/star'

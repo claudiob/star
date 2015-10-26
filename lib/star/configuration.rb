@@ -21,6 +21,7 @@ module Star
   # * +AWS_BUCKET+ to set the name of the S3 bucket
   # * +STAR_LOCATION+ to set the path for where to upload the file to
   # * +STAR_DURATION+ to set the time (in seconds) for the URL to exist for
+  # * +STAR_REMOTE+ to store file in the local filesystem and not remotely
   # In case both methods are used together,
   # {Star::Config#configure Star.configure} takes precedence.
   #
@@ -45,14 +46,18 @@ module Star
     #   calling #url on a remote file is publicly available.
     attr_accessor :duration
 
+    # @return [Booelan] whether to store files remotely or locally.
+    attr_accessor :remote
+
     # Initialize the global configuration settings, using the values of
     # the specified following environment variables by default.
     def initialize
       @access_key_id = ENV['AWS_ACCESS_KEY_ID']
       @secret_access_key = ENV['AWS_SECRET_ACCESS_KEY']
       @bucket = ENV['AWS_BUCKET']
-      @location = ENV['STAR_LOCATION']
+      @location = ENV.fetch('STAR_LOCATION', '/')
       @duration = ENV.fetch('STAR_DURATION', '30').to_i
+      @remote = %w(1 t T true TRUE).include? ENV.fetch('STAR_REMOTE', 't')
     end
   end
 end

@@ -6,14 +6,14 @@ Star helps you write Ruby apps that need to store files on S3 and retrieve them 
 After [configuring your app](#how-to-configure), you can write a file to S3 by running:
 
 ```ruby
-  remote_file = Star::Remote.new
-  remote_file.open{|f| f << "some text to store in a remote file"}
+  file = Star::File.new
+  file.open{|f| f << "some text to store in a remote file"}
 ```
 
 You can successively retrieve the same file from S3 by calling:
 
 ```ruby
-  url = remote_file.url
+  url = file.url
 ```
 
 This will provide a URL that everyone can access *for the next 30 seconds*.
@@ -49,14 +49,14 @@ To write a file to S3, [configure your app](#how-to-configure), then create a ne
 instance:
 
 ```ruby
-remote_file = Star::Remote.new
+file = Star::File.new
 ```
 
 You can now call any method you would normally use to add content to a
 `File`, for instance:
 
 ```ruby
-remote_file.open do |f|
+file.open do |f|
   f << "append some text"
   f.write "write some other text"
   f.writeln "write a line of text"
@@ -68,7 +68,7 @@ Once the file is closed, Star will automatically upload it to S3.
 To read the same file from S3, get its URL by calling
 
 ```ruby
-remote_file.url
+file.url
 ```
 
 By default, this URL will only be publicly available for 30 seconds.
@@ -82,14 +82,13 @@ When you create a new remote file instance, you can set these options:
 
 * `name`: the file name (defaults to `'attachment'`)
 * `content_type`: the content type for the file (defaults to `'application/octet-stream'`)
-* `path`: the remote folder where to store the file (defaults to `'attachments'`)
+* `folder`: the remote folder where to store the file (defaults to `'attachments'`)
 
-For instance, you can call `RemoteFile.new` with these options:
+For instance, you can call `File.new` with these options:
 
 ```ruby
-Star::RemoteFile.new name: 'test.csv', content_type: 'text/csv', path: 'spreadsheets'
+Star::File.new name: 'test.csv', content_type: 'text/csv', folder: 'spreadsheets'
 ```
-
 
 How to configure
 ================
@@ -114,6 +113,7 @@ Star also provide two options that you can set in your configuration:
 
 * `duration` specifies how many seconds the expiring URLs should be valid for (default: `30`)
 * `location` specifies the subfolder of your bucket where files should be stored (default: `'/'`)
+* `remote` specifies that files will be stored remotely on S3 (default: `true`)
 
 For instance, your configuration could look like this:
 
@@ -142,6 +142,36 @@ export STAR_LOCATION="production/uploads"
 ```
 
 is equivalent to configuring your app with the initializer above.
+
+How to store files locally
+==========================
+
+If you set `Star.configuration.remote` to `false`, then your files will be
+stored locally, rather than remotely on S3.
+
+This is very convenient if you use Star in a Rails application.
+By adding the following lines to `config/environments/development.rb`:
+
+```ruby
+Star.configure do |config|
+  config.remote = false
+  config.location = Rails.public_path
+end
+```
+
+all your files will be stored in your `public/` folder while developing.
+In production, your files will still be stored on S3.
+
+Your Rails controller/action that redirects to a file might look like this:
+
+
+```ruby
+if Star.configuration.remote
+  redirect_to file.url
+else
+  send_file file.path, type: file.content_type
+end
+```
 
 How to contribute
 =================

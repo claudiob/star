@@ -5,11 +5,11 @@ require 'base64'
 require 'uri'
 
 module Star
-  class RemoteFile
+  class File
     def initialize(options = {})
       @name = options.fetch :name, 'attachment'
       @content_type = options.fetch :content_type, 'application/octet-stream'
-      @path = options.fetch :path, 'attachments'
+      @folder = options.fetch :folder, 'attachments'
     end
 
     def open
@@ -24,10 +24,20 @@ module Star
       "https://#{host}/#{bucket}#{remote_path}?#{url_params}"
     end
 
+    def path
+      [Star.configuration.location, @folder, @name].compact.join('/')
+    end
+
     def store(tmp_file)
+      Star.configuration.remote ? store_remote(tmp_file) : store_local(tmp_file)
+    end
+
+  private
+
+    def store_remote(tmp_file)
       timestamp = Time.now.utc.strftime "%a, %d %b %Y %H:%M:%S UTC"
       signature = sign "PUT\n\n#{@content_type}\n#{timestamp}"
-      File.open(tmp_file) do |body|
+      ::File.open(tmp_file) do |body|
         request = put_file body, signature, timestamp
         response = Net::HTTP.start(host, 443, use_ssl: true) do |http|
           http.request request
@@ -37,7 +47,10 @@ module Star
       sleep 3 # See https://forums.aws.amazon.com/message.jspa?messageID=370480
     end
 
-  private
+    def store_local(tmp_file)
+      FileUtils.mkdir_p ::File.dirname(path)
+      FileUtils.mv tmp_file.path, path
+    end
 
     def url_params
       expires_at = Time.now.to_i + Star.configuration.duration
@@ -78,8 +91,7 @@ module Star
     end
 
     def remote_path
-      components = [Star.configuration.location, @path, @name]
-      URI.escape "/#{components.compact.join('/')}"
+      URI.escape path
     end
 
     def key

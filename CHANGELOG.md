@@ -8,4 +8,4 @@ For more information about changelogs, check
 
 ## 0.1.0 - unreleased
 
-* [FEATURE] Add `Star::RemoteFile` to write/read files on S3
+* [FEATURE] Add `Star::File` to write/read files on S3
