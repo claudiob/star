@@ -23,5 +23,5 @@ Star.configure do |config|
   config.secret_access_key  = ENV['STAR_TEST_SECRET_ACCESS_KEY']
   config.bucket             = ENV['STAR_TEST_BUCKET']
   config.location           = ENV['STAR_TEST_LOCATION']
-  config.duration           = 3
+  config.duration           = 30
 end

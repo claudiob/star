@@ -75,6 +75,22 @@ By default, this URL will only be publicly available for 30 seconds.
 This is useful to let your users download the file, while preventing them
 from sharing the URL and having other (unauthenticated) users download it.
 
+Options
+-------
+
+When you create a new remote file instance, you can set these options:
+
+* `name`: the file name (defaults to `'attachment'`)
+* `content_type`: the content type for the file (defaults to `'application/octet-stream'`)
+* `path`: the remote folder where to store the file (defaults to `'attachments'`)
+
+For instance, you can call `RemoteFile.new` with these options:
+
+```ruby
+Star::RemoteFile.new name: 'test.csv', content_type: 'text/csv', path: 'spreadsheets'
+```
+
+
 How to configure
 ================
 
@@ -126,7 +142,6 @@ export STAR_LOCATION="production/uploads"
 ```
 
 is equivalent to configuring your app with the initializer above.
-
 
 How to contribute
 =================

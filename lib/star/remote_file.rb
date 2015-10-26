@@ -6,6 +6,12 @@ require 'uri'
 
 module Star
   class RemoteFile
+    def initialize(options = {})
+      @name = options.fetch :name, 'attachment'
+      @content_type = options.fetch :content_type, 'application/octet-stream'
+      @path = options.fetch :path, 'attachments'
+    end
+
     def open
       Tempfile.open 'tmp_file' do |tmp_file|
         yield tmp_file
@@ -20,7 +26,7 @@ module Star
 
     def store(tmp_file)
       timestamp = Time.now.utc.strftime "%a, %d %b %Y %H:%M:%S UTC"
-      signature = sign "PUT\n\n#{content_type}\n#{timestamp}"
+      signature = sign "PUT\n\n#{@content_type}\n#{timestamp}"
       File.open(tmp_file) do |body|
         request = put_file body, signature, timestamp
         response = Net::HTTP.start(host, 443, use_ssl: true) do |http|
@@ -32,10 +38,6 @@ module Star
     end
 
   private
-
-    def content_type
-      'text/plain'
-    end
 
     def url_params
       expires_at = Time.now.to_i + Star.configuration.duration
@@ -54,7 +56,7 @@ module Star
         request.initialize_http_header 'Content-Length' => body.size.to_s
         request.add_field 'Host', host
         request.add_field 'Date', timestamp
-        request.add_field 'Content-Type', content_type
+        request.add_field 'Content-Type', @content_type
         request.add_field 'Authorization', "AWS #{key}:#{signature}"
       end
     end
@@ -76,7 +78,8 @@ module Star
     end
 
     def remote_path
-      URI.escape "/#{Star.configuration.location}/foobar.txt"
+      components = [Star.configuration.location, @path, @name]
+      URI.escape "/#{components.compact.join('/')}"
     end
 
     def key
