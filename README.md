@@ -33,7 +33,7 @@ After 30 seconds, access to the file using that URL [will be denied](http://docs
 Why use Star
 ============
 
-Star is not the only Ruby library to help Ruby developers store archives on S3.
+Star is not the only Ruby library to help developers store archives on S3.
 However, most other libraries are [huge](https://rubygems.org/gems/aws-sdk-core) and [heavy on dependencies](https://github.com/fog/fog/blob/master/fog.gemspec#L50-L100).
 
 Star does one thing, and does it well.
