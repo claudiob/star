@@ -6,6 +6,8 @@ require 'uri'
 
 module Star
   class File
+    attr_reader :content_type
+
     def initialize(options = {})
       @name = options.fetch :name, 'attachment'
       @content_type = options.fetch :content_type, 'application/octet-stream'
@@ -29,7 +31,7 @@ module Star
     end
 
     def store(tmp_file)
-      Star.configuration.remote ? store_remote(tmp_file) : store_local(tmp_file)
+      Star.remote? ? store_remote(tmp_file) : store_local(tmp_file)
     end
 
   private

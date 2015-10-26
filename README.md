@@ -166,7 +166,7 @@ Your Rails controller/action that redirects to a file might look like this:
 
 
 ```ruby
-if Star.configuration.remote
+if Star.remote?
   redirect_to file.url
 else
   send_file file.path, type: file.content_type

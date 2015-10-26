@@ -24,6 +24,11 @@ module Star
       yield configuration if block_given?
     end
 
+    # @return [Boolean] whether files are stored remotely (on S3).
+    def remote?
+      !!configuration.remote
+    end
+
     # Returns the global {Star::Models::Configuration} object.
     #
     # While this method _can_ be used to read and write configuration settings,
