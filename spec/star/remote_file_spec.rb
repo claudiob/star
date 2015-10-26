@@ -7,17 +7,14 @@ describe Star::RemoteFile do
       @original_content = "test this file"
       @remote_file = Star::RemoteFile.new
       @remote_file.open{|f| f.write @original_content}
+      @url = @remote_file.url
     end
 
     describe '#url' do
-      it 'returns the location of the remote file' do
-        expect(open(@remote_file.url).read).to eq @original_content
-      end
-
-      xit 'expires after 30 seconds' do
-        expect(open @remote_file.url).to be_a_url
-        sleep 30
-        expect(open @remote_file.url).to raise_error
+      it 'expires after the seconds specified in the configuration' do
+        expect(open(@url).read).to eq @original_content
+        sleep Star.configuration.duration + 1 # extra second, just in case
+        expect{open @url}.to raise_error OpenURI::HTTPError, '403 Forbidden'
       end
     end
   end
