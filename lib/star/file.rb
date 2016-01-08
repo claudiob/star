@@ -34,6 +34,10 @@ module Star
       Star.remote? ? store_remote(tmp_file) : store_local(tmp_file)
     end
 
+    def delete
+      Star.remote? ? delete_remote : delete_local
+    end
+
   private
 
     def store_remote(tmp_file)
@@ -52,6 +56,27 @@ module Star
     def store_local(tmp_file)
       FileUtils.mkdir_p ::File.dirname(path)
       FileUtils.mv tmp_file.path, path
+    end
+
+    def delete_remote
+      timestamp = Time.now.utc.strftime "%a, %d %b %Y %H:%M:%S UTC"
+      signature = sign "DELETE\n\n\n#{timestamp}"
+      request = delete_file signature, timestamp
+      response = Net::HTTP.start(host, 443, use_ssl: true) do |http|
+        http.request request
+      end
+      response.error! unless response.is_a? Net::HTTPNoContent
+    end
+
+    def delete_file(signature, timestamp)
+      Net::HTTP::Delete.new("/#{bucket}#{remote_path}").tap do |request|
+        request.add_field 'Authorization', "AWS #{key}:#{signature}"
+        request.add_field 'Date', timestamp
+      end
+    end
+
+    def delete_local
+      FileUtils.rm_f path
     end
 
     def url_params

@@ -26,5 +26,15 @@ describe Star::File do
         expect{open @url}.to raise_error OpenURI::HTTPError, '403 Forbidden'
       end
     end
+
+    describe '#delete' do
+      it 'deletes the remote copy of the file' do
+        @url = @file.url
+        expect{open @url}.not_to raise_error
+        @file.delete
+        expect{open @url}.to raise_error OpenURI::HTTPError, '404 Not Found'
+        expect{@file.delete}.not_to raise_error
+      end
+    end
   end
 end
