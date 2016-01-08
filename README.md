@@ -215,7 +215,8 @@ document the changes in CHANGELOG.md and README.md, bump the version, then run
 
     rake release
 
-Remember that the star gem follows [Semantic Versioning](http://semver.org).
-Any new release that fixes bugs and does not add features should bump the *patch* version (1.0.x).
-Any new release that is fully backward-compatible should bump the *minor* version (1.x.0).
-Any new version that breaks compatibility should bump the *major* version (2.0.0).
+Remember that the star gem follows [Semantic Versioning](http://semver.org):
+
+* Any new release that fixes bugs and does not add features should bump the *patch* version (1.0.x).
+* Any new release that is fully backward-compatible should bump the *minor* version (1.x.0).
+* Any new version that breaks compatibility should bump the *major* version (2.0.0).
