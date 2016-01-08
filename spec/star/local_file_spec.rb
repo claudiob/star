@@ -22,5 +22,14 @@ describe Star::File do
         expect(open(@file.path).read).to eq @original_content
       end
     end
+
+    describe '#delete' do
+      it 'deletes the existing local copy of the file' do
+        expect(File.exists? @file.path).to be true
+        @file.delete
+        expect{@file.delete}.not_to raise_error
+        expect(File.exists? @file.path).to be false
+      end
+    end
   end
 end

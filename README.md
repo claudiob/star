@@ -85,6 +85,8 @@ By default, this URL will only be publicly available for 30 seconds.
 This is useful to let your users download the file, while preventing them
 from sharing the URL and having other (unauthenticated) users download it.
 
+To delete the file from S3, simply call `file.delete`.
+
 Options
 -------
 
@@ -174,7 +176,6 @@ In production, your files will still be stored on S3.
 
 Your Rails controller/action that redirects to a file might look like this:
 
-
 ```ruby
 if Star.remote?
   redirect_to file.url
@@ -218,4 +219,3 @@ Remember that the star gem follows [Semantic Versioning](http://semver.org).
 Any new release that fixes bugs and does not add features should bump the *patch* version (1.0.x).
 Any new release that is fully backward-compatible should bump the *minor* version (1.x.0).
 Any new version that breaks compatibility should bump the *major* version (2.0.0).
-
