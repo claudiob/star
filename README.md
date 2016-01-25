@@ -87,6 +87,8 @@ from sharing the URL and having other (unauthenticated) users download it.
 
 To delete the file from S3, simply call `file.delete`.
 
+To duplicate the file to a different location, simply call `other.copy_from(file)`.
+
 Options
 -------
 

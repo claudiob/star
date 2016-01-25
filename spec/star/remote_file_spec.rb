@@ -36,5 +36,16 @@ describe Star::File do
         expect{@file.delete}.not_to raise_error
       end
     end
+
+    describe '#copy_from' do
+      before { @target = Star::File.new folder: 'attachments/deep' }
+      after  { @target.delete }
+      it 'copies the existing remote file to a different location' do
+        expect{open @target.url}.to raise_error OpenURI::HTTPError, '404 Not Found'
+        @target.copy_from @file
+        expect{open @target.url}.not_to raise_error
+        expect(open(@target.url).read).to eq @original_content
+      end
+    end
   end
 end
