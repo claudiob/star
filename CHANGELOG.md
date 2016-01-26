@@ -6,6 +6,10 @@ For more information about changelogs, check
 [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## 1.2.0 - 2015.01.25
+
+* [FEATURE] Add `Star::File#copy_from` to duplicate files
+
 ## 1.1.0 - 2015.10.26
 
 * [FEATURE] Add `Star::File#delete` to delete files

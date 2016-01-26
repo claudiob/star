@@ -38,6 +38,14 @@ module Star
       Star.remote? ? delete_remote : delete_local
     end
 
+    def copy_from(source)
+      Star.remote? ? copy_from_remote(source) : copy_from_local(source)
+    end
+
+    def remote_path
+      URI.escape path
+    end
+
   private
 
     def store_remote(tmp_file)
@@ -75,8 +83,34 @@ module Star
       end
     end
 
+    def copy_from_remote(source)
+      timestamp = Time.now.utc.strftime "%a, %d %b %Y %H:%M:%S UTC"
+      extra = "x-amz-copy-source:/#{bucket}#{source.remote_path}"
+      signature = sign "PUT\n\n#{@content_type}\n#{timestamp}\n#{extra}"
+      request = copy_file signature, timestamp, source
+      response = Net::HTTP.start(host, 443, use_ssl: true) do |http|
+        http.request request
+      end
+      response.error! unless response.is_a? Net::HTTPSuccess
+      sleep 3 # See https://forums.aws.amazon.com/message.jspa?messageID=370480
+    end
+
+    def copy_file(signature, timestamp, source)
+      Net::HTTP::Put.new("/#{bucket}#{remote_path}").tap do |request|
+        request.add_field 'Date', timestamp
+        request.add_field 'Content-Type', @content_type
+        request.add_field 'x-amz-copy-source', "/#{bucket}#{source.remote_path}"
+        request.add_field 'Authorization', "AWS #{key}:#{signature}"
+      end
+    end
+
     def delete_local
       FileUtils.rm_f path
+    end
+
+    def copy_from_local(source)
+      FileUtils.mkdir_p ::File.dirname(path)
+      FileUtils.cp source.path, path
     end
 
     def url_params
@@ -115,10 +149,6 @@ module Star
 
     def host
       "s3.amazonaws.com"
-    end
-
-    def remote_path
-      URI.escape path
     end
 
     def key

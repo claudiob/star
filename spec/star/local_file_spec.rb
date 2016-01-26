@@ -31,5 +31,16 @@ describe Star::File do
         expect(File.exists? @file.path).to be false
       end
     end
+
+    describe '#copy_from' do
+      before { @target = Star::File.new name: 'tgt.txt', folder: 'locals/deep' }
+      after  { @target.delete }
+      it 'copies the existing local file to a different location' do
+        expect(File.exists? @target.path).to be false
+        @target.copy_from @file
+        expect(File.exists? @target.path).to be true
+        expect(open(@target.path).read).to eq @original_content
+      end
+    end
   end
 end
