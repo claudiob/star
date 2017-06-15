@@ -3,13 +3,13 @@
 
 Star helps you write Ruby apps that need to store files on S3 and retrieve them with expiring URLs.
 
-The **source code** is available on [GitHub](https://github.com/Fullscreen/star) and the **documentation** on [RubyDoc](http://www.rubydoc.info/github/Fullscreen/star/master/Star/Interface).
+The **source code** is available on [GitHub](https://github.com/claudiob/star) and the **documentation** on [RubyDoc](http://www.rubydoc.info/github/claudiob/star/master/Star/Interface).
 
-[![Build Status](http://img.shields.io/travis/Fullscreen/star/master.svg)](https://travis-ci.org/Fullscreen/star)
-[![Coverage Status](http://img.shields.io/coveralls/Fullscreen/star/master.svg)](https://coveralls.io/r/Fullscreen/star)
-[![Dependency Status](http://img.shields.io/gemnasium/Fullscreen/star.svg)](https://gemnasium.com/Fullscreen/star)
-[![Code Climate](http://img.shields.io/codeclimate/github/Fullscreen/star.svg)](https://codeclimate.com/github/Fullscreen/star)
-[![Online docs](http://img.shields.io/badge/docs-✓-green.svg)](http://www.rubydoc.info/github/Fullscreen/star/master/Star/File)
+[![Build Status](http://img.shields.io/travis/claudiob/star/master.svg)](https://travis-ci.org/claudiob/star)
+[![Coverage Status](http://img.shields.io/coveralls/claudiob/star/master.svg)](https://coveralls.io/r/claudiob/star)
+[![Dependency Status](http://img.shields.io/gemnasium/claudiob/star.svg)](https://gemnasium.com/claudiob/star)
+[![Code Climate](http://img.shields.io/codeclimate/github/claudiob/star.svg)](https://codeclimate.com/github/claudiob/star)
+[![Online docs](http://img.shields.io/badge/docs-✓-green.svg)](http://www.rubydoc.info/github/claudiob/star/master/Star/File)
 [![Gem Version](http://img.shields.io/gem/v/star.svg)](http://rubygems.org/gems/star)
 
 
@@ -212,7 +212,7 @@ How to release new versions
 If you are a manager of this project, remember to upgrade the [Star gem](http://rubygems.org/gems/star)
 whenever a new feature is added or a bug gets fixed.
 
-Make sure all the tests are passing on [Travis CI](https://travis-ci.org/Fullscreen/star),
+Make sure all the tests are passing on [Travis CI](https://travis-ci.org/claudiob/star),
 document the changes in CHANGELOG.md and README.md, bump the version, then run
 
     rake release
