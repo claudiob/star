@@ -33,7 +33,7 @@ describe Star::File do
         @url = @file.url
         expect{open @url}.not_to raise_error
         @file.delete
-        expect{open @url}.to raise_error OpenURI::HTTPError, '404 Not Found'
+        expect{open @url}.to raise_error OpenURI::HTTPError
         expect{@file.delete}.not_to raise_error
       end
     end
