@@ -6,6 +6,10 @@ For more information about changelogs, check
 [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## 1.3.0 - 2017.06.15
+
+* [ENHANCEMENT] Retry once if S3 raises a Net::HTTPFatalError
+
 ## 1.2.0 - 2015.01.25
 
 * [FEATURE] Add `Star::File#copy_from` to duplicate files
